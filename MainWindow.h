@@ -13,18 +13,18 @@ class MainWindow : public CDialogEx
 public:
 	MainWindow(CWnd* pParent = nullptr);	// 标准构造函数
 
-	// 对话框数据
+// 对话框数据
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_IMAGEOPERATE_DIALOG };
 #endif
 
-protected:
+	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 支持
 
 	void bind(HWND);
 
 
-	// 实现
+// 实现
 protected:
 	HICON m_hIcon;
 

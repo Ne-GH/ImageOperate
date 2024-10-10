@@ -18,9 +18,10 @@ nl::ImageOperator::ImageOperator(const std::filesystem::path& path) {
 //}
 
 void nl::ImageOperator::open(const std::filesystem::path& path) {
-    //if (!path.empty() && std::filesystem::exists(path)) {
-    //    image_ = cv::imread(path.generic_string());
-    //}
+    if (!path.empty() && std::filesystem::exists(path)) {
+        image_ = cv::imread(path.generic_string());
+    }
+    show_image();
 }
 
 void nl::ImageOperator::save() {
@@ -62,7 +63,6 @@ HWND nl::ImageOperator::get_show_window() {
 }
 
 void nl::ImageOperator::show_image() {
-    cv::imshow("ImageShow", image_);//opencv显示图片
-
+    cv::imshow("ImageShowWindow", image_);//opencv显示图片
 }
 
