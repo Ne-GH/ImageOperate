@@ -67,7 +67,6 @@ nl::ImageOperator& nl::ImageOperator::reverse_horizontally() {
         for (int j = 0; j < col / 2; ++j)
             std::swap(data({ i,j }) , data({ i,col - j - 1 }));
 
-
     return *this;
 }
 
@@ -77,9 +76,6 @@ nl::ImageOperator& nl::ImageOperator::reverse_horizontally() {
 nl::ImageOperator& nl::ImageOperator::reverse_vertically() {
     int row = image_.rows, col = image_.cols;
     nl::MultArray<RGBPixel> data(reinterpret_cast<RGBPixel*>(image_.data), { row, col });
-    show_message_box("num: " + std::to_string(image_.channels()));
-    show_message_box("elem size: " + std::to_string(image_.elemSize()));
-
     
     for (int i = 0; i < row / 2; ++i)
         for (int j = 0; j < col; ++j)
