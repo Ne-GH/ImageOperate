@@ -108,8 +108,8 @@ void MainWindow::open_image() {
 
 	if (IDOK == file_dialog.DoModal()) {
 		image_operator_.open(file_dialog.GetPathName().GetBuffer());
-		image_operator_.to_grayscale().to_binary();
-
+		auto count = image_operator_.to_grayscale().to_binary().get_histogram_data();
+		show_message_box(std::to_string(count[0]) + "," + std::to_string(count[100]) + "," + std::to_string(count[255]));
 	}
 
 

@@ -139,24 +139,20 @@ nl::ImageOperator& nl::ImageOperator::to_pseudo_color() {
 
 std::array<size_t, 256> nl::ImageOperator::get_histogram_data() {
 
-    std::array<size_t, 256> count = { 0 };
-    int row = image_.rows, col = image_.cols, size = image_.elemSize();
-
     // @TODO 暂时仅实现灰度图的直方图
-    if (size != 1)
+    if (image_.elemSize() != 1)
         return {};
+    std::array<size_t, 256> count = { 0 };
+    int row = image_.rows, col = image_.cols;
+    nl::MultArray<uchar> data(image_.data, { row, col });
 
-    void* data = image_.data;
+    for (int i = 0; i < row; ++i) {
+        for (int j = 0; j < col; ++j) {
+            count[data({ i, j })]++;
+        }
+    }
 
-
-
-
-
-
-
-
-
-    return {};
+    return count;
 }
 
 HWND nl::ImageOperator::get_show_window() {
