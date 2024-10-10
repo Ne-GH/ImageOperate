@@ -200,6 +200,7 @@
     <ClCompile Include="ImageOperator.cpp" />
     <ClCompile Include="MainApp.cpp" />
     <ClCompile Include="MainWindow.cpp" />
+    <ClCompile Include="MultArray.ixx" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

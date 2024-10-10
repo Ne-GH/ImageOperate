@@ -50,6 +50,9 @@
     <ClCompile Include="ImageOperator.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="MultArray.ixx">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ImageOperate.rc">

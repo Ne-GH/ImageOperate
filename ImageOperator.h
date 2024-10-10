@@ -13,10 +13,14 @@ class ImageOperator {
 	HWND window_handle_;
 
 public:
+
 	ImageOperator();
 	explicit ImageOperator(const std::filesystem::path& path);
-	// ImageOperator(uchar image[], size_t row, size_t column);
 	~ImageOperator();
+
+	// @TODO 拷贝动作待处理
+	ImageOperator(const ImageOperator&) = delete;
+	ImageOperator operator = (const ImageOperator&) = delete;
 
 	void open(const std::filesystem::path& path);
 	void save();
@@ -25,10 +29,12 @@ public:
 	ImageOperator& resize(int width, int height);
 	ImageOperator& rotation(int angle);
 	ImageOperator& rotation(int angle, int x, int y);
+	ImageOperator& reverse_horizontally();
+	ImageOperator& reverse_vertically();
 	ImageOperator& to_grayscale();
 	ImageOperator& to_binary();
 	ImageOperator& to_pseudo_color();
-	std::array<size_t, 256> get_histogram();
+	std::array<size_t, 256> get_histogram_data();
 	HWND get_show_window();
 	void show_image();
 

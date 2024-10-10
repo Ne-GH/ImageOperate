@@ -10,6 +10,7 @@
 
 #include "resource.h"
 
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -53,6 +54,8 @@ BOOL MainWindow::OnInitDialog() {
 
 
     bind(image_operator_.get_show_window());
+
+
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
