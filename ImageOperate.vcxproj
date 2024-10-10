@@ -192,6 +192,7 @@
     <ClInclude Include="ImageOperator.h" />
     <ClInclude Include="MainApp.h" />
     <ClInclude Include="MainWindow.h" />
+    <ClInclude Include="MultArray.hpp" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
@@ -200,7 +201,6 @@
     <ClCompile Include="ImageOperator.cpp" />
     <ClCompile Include="MainApp.cpp" />
     <ClCompile Include="MainWindow.cpp" />
-    <ClCompile Include="MultArray.ixx" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -106,8 +106,12 @@ void MainWindow::open_image() {
 	TCHAR image_type[] = L"图片(*.png;*.jpg)|*.png;*.jpg|所有文件(*.*)|*.*||";
 	CFileDialog file_dialog(TRUE, NULL, NULL, 0, image_type, this);
 
-	if (IDOK == file_dialog.DoModal())
+	if (IDOK == file_dialog.DoModal()) {
 		image_operator_.open(file_dialog.GetPathName().GetBuffer());
+		image_operator_.reverse_vertically();
+
+	}
+
 
 }
 

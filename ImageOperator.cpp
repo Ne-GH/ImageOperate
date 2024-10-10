@@ -48,11 +48,36 @@ nl::ImageOperator& nl::ImageOperator::rotation(int angle,int x,int y) {
 
     return *this;
 }
+
+/*
+ * @brief : 水平翻转
+*/
 nl::ImageOperator& nl::ImageOperator::reverse_horizontally() {
+    int row = image_.rows;
+    int col = image_.cols;
+
+    nl::MultArray<RGBPixel> data(reinterpret_cast<RGBPixel*>(image_.data), { row, col });
+
+    for (int i = 0; i < row; ++i)
+        for (int j = 0; j < col / 2; ++j)
+            std::swap(data({ i,j }) , data({ i,col - j - 1 }));
+
 
     return *this;
 }
+
+/*
+ * @brief : 竖直翻转
+*/
 nl::ImageOperator& nl::ImageOperator::reverse_vertically() {
+    int row = image_.rows;
+    int col = image_.cols;
+
+    nl::MultArray<RGBPixel> data(reinterpret_cast<RGBPixel*>(image_.data), { row, col });
+
+    for (int i = 0; i < row / 2; ++i)
+        for (int j = 0; j < col; ++j)
+            std::swap(data({ i, j }), data({ row - i - 1, j}));
 
     return *this;
 }

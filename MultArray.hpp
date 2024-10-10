@@ -11,11 +11,11 @@ NAMESPACE_BEGIN(nl)
 template<typename T>
 class MultArray {
     T* data_;
-    std::vector<size_t> dimensions_;
+    std::vector<int> dimensions_;
 public:
-    MultArray(T* p, std::vector<size_t> dims) : data_(p), dimensions_(dims) {  }
+    MultArray(T* p, std::vector<int> dims) : data_(p), dimensions_(dims) {  }
 
-    T& operator()(std::vector<size_t> indices) {
+    T& operator()(std::vector<int> indices) {
         if (indices.size() != dimensions_.size()) {
             throw std::invalid_argument("Number of indices must match the number of dimensions.");
         }

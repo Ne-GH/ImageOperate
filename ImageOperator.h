@@ -8,6 +8,9 @@
 namespace nl {
 
 class ImageOperator {
+	struct RGBPixel {
+		uchar R, G, B;
+	};
 
 	cv::Mat image_;
 	HWND window_handle_;
