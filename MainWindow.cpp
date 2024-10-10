@@ -32,6 +32,7 @@ BEGIN_MESSAGE_MAP(MainWindow, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
     ON_COMMAND(ID_OPEN_IMAGE, &MainWindow::open_image)
+	ON_WM_GETMINMAXINFO()
 END_MESSAGE_MAP()
 
 
@@ -43,6 +44,8 @@ BOOL MainWindow::OnInitDialog() {
 	//  执行此操作
 	SetIcon(m_hIcon, TRUE);			// 设置大图标
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
+
+	
 
 
     menu_.LoadMenu(MAIN_MENU);
@@ -86,6 +89,8 @@ void MainWindow::bind(HWND handle) {
     HWND hParent = ::GetParent(handle);
     ::SetParent(handle, GetDlgItem(IDC_MAIN_PIC)->m_hWnd);
     ::ShowWindow(hParent, SW_HIDE);
+    ::ShowWindow(handle, SW_SHOW);
+	
 }
 
 void MainWindow::show_message_box(const std::string& message) {
@@ -101,4 +106,18 @@ void MainWindow::open_image() {
 	if (IDOK == file_dialog.DoModal())
 		image_operator_.open(file_dialog.GetPathName().GetBuffer());
 
+}
+
+
+void MainWindow::OnGetMinMaxInfo(MINMAXINFO* lpMMI) {
+	static int min_width = 580, min_height = 410;
+
+	if (lpMMI->ptMinTrackSize.x < min_width)
+		lpMMI->ptMinTrackSize.x = min_width;
+
+	if (lpMMI->ptMinTrackSize.y < min_height)
+		lpMMI->ptMinTrackSize.y = min_height;
+
+
+	CDialogEx::OnGetMinMaxInfo(lpMMI);
 }

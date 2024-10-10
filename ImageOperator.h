@@ -16,12 +16,15 @@ public:
 	ImageOperator();
 	explicit ImageOperator(const std::filesystem::path& path);
 	// ImageOperator(uchar image[], size_t row, size_t column);
+	~ImageOperator();
 
 	void open(const std::filesystem::path& path);
 	void save();
 
 	ImageOperator& zoom(int multiple);
+	ImageOperator& resize(int width, int height);
 	ImageOperator& rotation(int angle);
+	ImageOperator& rotation(int angle, int x, int y);
 	ImageOperator& to_grayscale();
 	ImageOperator& to_binary();
 	ImageOperator& to_pseudo_color();

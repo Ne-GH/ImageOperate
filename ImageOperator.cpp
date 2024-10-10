@@ -9,7 +9,11 @@ nl::ImageOperator::ImageOperator() : nl::ImageOperator("") {  }
 nl::ImageOperator::ImageOperator(const std::filesystem::path& path) {
     cv::namedWindow("ImageShowWindow");
     window_handle_ = (HWND)cvGetWindowHandle("ImageShowWindow");
-    // open(path);
+    ShowWindow(window_handle_, 0);
+}
+
+nl::ImageOperator::~ImageOperator() {
+    cv::destroyWindow("ImageShowWindow");
 }
 
 // @TODO
@@ -32,8 +36,16 @@ nl::ImageOperator& nl::ImageOperator::zoom(int multiple) {
 
     return *this;
 }
+nl::ImageOperator& nl::ImageOperator::resize(int width, int height) {
+
+}
 
 nl::ImageOperator& nl::ImageOperator::rotation(int angle) {
+
+    return *this;
+}
+
+nl::ImageOperator& nl::ImageOperator::rotation(int angle,int x,int y) {
 
     return *this;
 }
@@ -63,6 +75,6 @@ HWND nl::ImageOperator::get_show_window() {
 }
 
 void nl::ImageOperator::show_image() {
-    cv::imshow("ImageShowWindow", image_);//opencv显示图片
+    cv::imshow("ImageShowWindow", image_);
 }
 

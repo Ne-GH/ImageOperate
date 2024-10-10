@@ -36,4 +36,5 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void open_image();
+	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
 };
