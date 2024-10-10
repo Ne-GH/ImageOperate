@@ -2,10 +2,15 @@
 #include "ImageOperator.h"
 #include <opencv2/highgui/highgui_c.h>
 #include <Windows.h>
+#include <string>
 #include "MultArray.hpp"
 
 #include "MainApp.h"
 
+void show_message_box(const std::string& message) {
+    CString msg(message.c_str());
+    AfxMessageBox(msg, MB_OK | MB_ICONINFORMATION);
+}
 nl::ImageOperator::ImageOperator() : nl::ImageOperator("") {  }
 nl::ImageOperator::ImageOperator(const std::filesystem::path& path) {
     cv::namedWindow("ImageShowWindow");
@@ -70,18 +75,37 @@ nl::ImageOperator& nl::ImageOperator::reverse_horizontally() {
  * @brief : 竖直翻转
 */
 nl::ImageOperator& nl::ImageOperator::reverse_vertically() {
-    int row = image_.rows;
-    int col = image_.cols;
-
+    int row = image_.rows, col = image_.cols;
     nl::MultArray<RGBPixel> data(reinterpret_cast<RGBPixel*>(image_.data), { row, col });
+    show_message_box("num: " + std::to_string(image_.channels()));
+    show_message_box("elem size: " + std::to_string(image_.elemSize()));
 
+    
     for (int i = 0; i < row / 2; ++i)
         for (int j = 0; j < col; ++j)
             std::swap(data({ i, j }), data({ row - i - 1, j}));
 
+
     return *this;
 }
+
 nl::ImageOperator& nl::ImageOperator::to_grayscale() {
+
+    int row = image_.rows, col = image_.cols;
+    nl::MultArray<RGBPixel> data(reinterpret_cast<RGBPixel*>(image_.data), { row, col });
+
+    auto image = cv::Mat(row, col, CV_8UC1);
+    nl::MultArray<uchar> image_data(image.data, { row,col });
+
+    for (int i = 0; i < row; ++i) {
+        for (int j = 0; j < col; ++j) {
+            auto pixel = data({ i,j });
+            int gray = pixel.R * 0.299 + pixel.G * 0.587 + pixel.B * 0.114;
+            image_data({ i,j }) = gray;
+        }
+    }
+
+    image_ = image;
 
     return *this;
 }

@@ -16,7 +16,7 @@ class ImageOperator {
 	HWND window_handle_;
 
 public:
-
+	
 	ImageOperator();
 	explicit ImageOperator(const std::filesystem::path& path);
 	~ImageOperator();
