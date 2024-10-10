@@ -88,6 +88,11 @@ void MainWindow::bind(HWND handle) {
     ::ShowWindow(hParent, SW_HIDE);
 }
 
+void MainWindow::show_message_box(const std::string& message) {
+	CString msg(message.c_str());
+	AfxMessageBox(msg, MB_OK | MB_ICONINFORMATION);
+}
+
 
 void MainWindow::open_image() {
 	TCHAR image_type[] = L"图片(*.png;*.jpg)|*.png;*.jpg|所有文件(*.*)|*.*||";

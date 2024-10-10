@@ -12,16 +12,17 @@ class MainWindow : public CDialogEx
 	nl::ImageOperator image_operator_;
 public:
 	MainWindow(CWnd* pParent = nullptr);	// 标准构造函数
+	void bind(HWND);
+	void show_message_box(const std::string& message);
 
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_IMAGEOPERATE_DIALOG };
 #endif
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 支持
 
-	void bind(HWND);
 
 
 // 实现
