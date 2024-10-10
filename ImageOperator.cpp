@@ -110,8 +110,25 @@ nl::ImageOperator& nl::ImageOperator::to_grayscale() {
     return *this;
 }
 
-nl::ImageOperator& nl::ImageOperator::to_binary() {
+nl::ImageOperator& nl::ImageOperator::to_binary(int threshold) {
+    int elem_size = image_.elemSize();
 
+    // @TODO 未处理RGB图像
+    if (elem_size != 1)
+        return *this;
+
+    int row = image_.rows, col = image_.cols;
+    nl::MultArray<uchar> data(image_.data, { row, col });
+
+
+    for (int i = 0; i < row; ++i) {
+        for (int j = 0; j < col; ++j) {
+            if (data({ i, j }) > threshold) 
+                data({ i, j }) = 255;
+            else
+                data({ i, j }) = 0;
+        }
+    }
     return *this;
 }
 

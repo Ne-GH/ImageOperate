@@ -108,7 +108,7 @@ void MainWindow::open_image() {
 
 	if (IDOK == file_dialog.DoModal()) {
 		image_operator_.open(file_dialog.GetPathName().GetBuffer());
-		image_operator_.to_grayscale();
+		image_operator_.to_grayscale().to_binary();
 
 	}
 

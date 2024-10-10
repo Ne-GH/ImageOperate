@@ -35,7 +35,7 @@ public:
 	ImageOperator& reverse_horizontally();
 	ImageOperator& reverse_vertically();
 	ImageOperator& to_grayscale();
-	ImageOperator& to_binary();
+	ImageOperator& to_binary(int = 100);
 	ImageOperator& to_pseudo_color();
 	std::array<size_t, 256> get_histogram_data();
 	HWND get_show_window();
