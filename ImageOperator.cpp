@@ -7,6 +7,14 @@
 
 #include "MainApp.h"
 
+template<typename T>
+constexpr size_t nl::ImageOperator::get_elem_size() {
+    if constexpr (std::is_same_v<T,RGBPixel>) 
+        return 3;
+    else if (std::is_same_v<T,uchar>)
+        return 1;
+}
+
 void show_message_box(const std::string& message) {
     CString msg(message.c_str());
     AfxMessageBox(msg, MB_OK | MB_ICONINFORMATION);
@@ -73,34 +81,39 @@ nl::ImageOperator& nl::ImageOperator::reverse_horizontally() {
 
     return *this;
 }
-nl::ImageOperator& nl::ImageOperator::reverse_horizontally_new() {
-    int row = image_.rows;
-    int col = image_.cols;
 
-    nl::MultArray<RGBPixel> data(reinterpret_cast<RGBPixel*>(image_.data), { row, col });
-    std::span<RGBPixel> sp1, sp2;
-
-    auto buf = new uchar[col];
-    for (int i = 0; i < data.size() / 2; ++i) {
-        auto sp1 = data[i].to_span();
-        auto sp2 = data[row - i - 1].to_span();
-        std::swap(sp1, sp2);
-
-    }
-
-    return *this;
-}
 /*
  * @brief : 竖直翻转
 */
 nl::ImageOperator& nl::ImageOperator::reverse_vertically() {
     int row = image_.rows, col = image_.cols;
     nl::MultArray<RGBPixel> data(reinterpret_cast<RGBPixel*>(image_.data), { row, col });
-    
-    for (int i = 0; i < row / 2; ++i)
-        for (int j = 0; j < col; ++j)
-            std::swap(data({ i, j }), data({ row - i - 1, j}));
+    auto buf = new RGBPixel[col];
 
+    for (int i = 0; i < row / 2; ++i) 
+        data.swap(data[i].to_span(), data[row - i - 1].to_span(), buf, get_elem_size<RGBPixel>());
+    delete[] buf;
+
+    return *this;
+}
+
+
+nl::ImageOperator& nl::ImageOperator::reverse_vertically_new() {
+
+    int row = image_.rows, col = image_.cols;
+    uchar* data = image_.data;
+    auto buf = new uchar[col * 3];
+    
+#define LINE(num) ((num) * col * 3)
+
+    for (int i = 0; i < row / 2; ++i) {
+        memcpy(buf,                         &data[LINE(i)],             col * 3);
+        memcpy(&data[LINE(i)],              &data[LINE(row - i - 1)],   col * 3);
+        memcpy(&data[LINE(row - i - 1)],    buf,                        col * 3);
+    }
+
+#undef LINE
+    delete[]buf;
 
     return *this;
 }

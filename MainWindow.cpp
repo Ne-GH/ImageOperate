@@ -9,6 +9,7 @@
 #include "afxdialogex.h"
 
 #include "resource.h"
+#include <chrono>
 
 
 #ifdef _DEBUG
@@ -106,12 +107,25 @@ void MainWindow::open_image() {
 	TCHAR image_type[] = L"图片(*.png;*.jpg)|*.png;*.jpg|所有文件(*.*)|*.*||";
 	CFileDialog file_dialog(TRUE, NULL, NULL, 0, image_type, this);
 
-	if (IDOK == file_dialog.DoModal()) {
-		image_operator_.open(file_dialog.GetPathName().GetBuffer());
-		auto count = image_operator_.to_grayscale().to_binary().get_histogram_data();
-		show_message_box(std::to_string(count[0]) + "," + std::to_string(count[100]) + "," + std::to_string(count[255]));
-	}
+	if (IDOK != file_dialog.DoModal())
+		return;
 
+	image_operator_.open(file_dialog.GetPathName().GetBuffer());
+
+	auto begin = std::chrono::system_clock::now();
+	for (int i = 0;i < 100000; ++i ) 
+		image_operator_.reverse_vertically_new();
+	auto end = std::chrono::system_clock::now();
+	size_t time1 = std::chrono::duration_cast<std::chrono::seconds>(end - begin).count();
+
+	begin = std::chrono::system_clock::now();
+	for (int i = 0; i < 100000; ++i)
+		cv::flip(image_operator_.image_, image_operator_.image_, 1);
+		// image_operator_.reverse_vertically();
+	end = std::chrono::system_clock::now();
+	size_t time2 = std::chrono::duration_cast<std::chrono::seconds>(end - begin).count();
+
+	show_message_box(std::to_string(time1) + " ," + std::to_string(time2));
 
 }
 

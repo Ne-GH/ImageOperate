@@ -13,10 +13,13 @@ class ImageOperator {
 		uchar R, G, B;
 	};
 
-	cv::Mat image_;
 	HWND window_handle_;
 
+	template<typename T>
+	constexpr size_t get_elem_size();
+
 public:
+	cv::Mat image_;
 	
 	ImageOperator();
 	explicit ImageOperator(const std::filesystem::path& path);
@@ -38,8 +41,8 @@ public:
 	ImageOperator& rotation(int angle);
 	ImageOperator& rotation(int angle, int x, int y);
 	ImageOperator& reverse_horizontally();
-	ImageOperator& reverse_horizontally_new();
 	ImageOperator& reverse_vertically();
+	ImageOperator& reverse_vertically_new();
 	ImageOperator& to_grayscale();
 	ImageOperator& to_binary(int = 100);
 	ImageOperator& to_pseudo_color();
