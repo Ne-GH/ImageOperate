@@ -4,6 +4,7 @@
 #include <filesystem>
 
 #include <opencv.hpp>
+#include "MultArray.hpp"
 
 namespace nl {
 
@@ -25,6 +26,10 @@ public:
 	ImageOperator(const ImageOperator&) = delete;
 	ImageOperator operator = (const ImageOperator&) = delete;
 
+	template<typename T>
+	nl::MultArray<T> get_image_data();
+
+
 	void open(const std::filesystem::path& path);
 	void save();
 
@@ -33,6 +38,7 @@ public:
 	ImageOperator& rotation(int angle);
 	ImageOperator& rotation(int angle, int x, int y);
 	ImageOperator& reverse_horizontally();
+	ImageOperator& reverse_horizontally_new();
 	ImageOperator& reverse_vertically();
 	ImageOperator& to_grayscale();
 	ImageOperator& to_binary(int = 100);

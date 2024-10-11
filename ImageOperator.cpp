@@ -22,6 +22,10 @@ nl::ImageOperator::~ImageOperator() {
     cv::destroyWindow("ImageShowWindow");
 }
 
+template<typename T>
+nl::MultArray<T> nl::ImageOperator::get_image_data() {
+    nl::MultArray<RGBPixel> data(reinterpret_cast<RGBPixel*>(image_.data), { image_.rows, image_.cols });
+}
 
 void nl::ImageOperator::open(const std::filesystem::path& path) {
     if (!path.empty() && std::filesystem::exists(path)) {
@@ -69,7 +73,23 @@ nl::ImageOperator& nl::ImageOperator::reverse_horizontally() {
 
     return *this;
 }
+nl::ImageOperator& nl::ImageOperator::reverse_horizontally_new() {
+    int row = image_.rows;
+    int col = image_.cols;
 
+    nl::MultArray<RGBPixel> data(reinterpret_cast<RGBPixel*>(image_.data), { row, col });
+    std::span<RGBPixel> sp1, sp2;
+
+    auto buf = new uchar[col];
+    for (int i = 0; i < data.size() / 2; ++i) {
+        auto sp1 = data[i].to_span();
+        auto sp2 = data[row - i - 1].to_span();
+        std::swap(sp1, sp2);
+
+    }
+
+    return *this;
+}
 /*
  * @brief : 竖直翻转
 */
