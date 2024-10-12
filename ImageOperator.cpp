@@ -86,19 +86,6 @@ nl::ImageOperator& nl::ImageOperator::reverse_horizontally() {
  * @brief : 竖直翻转
 */
 nl::ImageOperator& nl::ImageOperator::reverse_vertically() {
-    int row = image_.rows, col = image_.cols;
-    nl::MultArray<RGBPixel> data(reinterpret_cast<RGBPixel*>(image_.data), { row, col });
-    auto buf = new RGBPixel[col];
-
-    for (int i = 0; i < row / 2; ++i) 
-        data.swap(data[i].to_span(), data[row - i - 1].to_span(), buf, get_elem_size<RGBPixel>());
-    delete[] buf;
-
-    return *this;
-}
-
-
-nl::ImageOperator& nl::ImageOperator::reverse_vertically_new() {
 
     int row = image_.rows, col = image_.cols;
     uchar* data = image_.data;

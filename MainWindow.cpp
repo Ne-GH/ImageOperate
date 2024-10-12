@@ -112,20 +112,6 @@ void MainWindow::open_image() {
 
 	image_operator_.open(file_dialog.GetPathName().GetBuffer());
 
-	auto begin = std::chrono::system_clock::now();
-	for (int i = 0;i < 100000; ++i ) 
-		image_operator_.reverse_vertically_new();
-	auto end = std::chrono::system_clock::now();
-	size_t time1 = std::chrono::duration_cast<std::chrono::seconds>(end - begin).count();
-
-	begin = std::chrono::system_clock::now();
-	for (int i = 0; i < 100000; ++i)
-		cv::flip(image_operator_.image_, image_operator_.image_, 1);
-		// image_operator_.reverse_vertically();
-	end = std::chrono::system_clock::now();
-	size_t time2 = std::chrono::duration_cast<std::chrono::seconds>(end - begin).count();
-
-	show_message_box(std::to_string(time1) + " ," + std::to_string(time2));
 
 }
 

@@ -14,12 +14,12 @@ class ImageOperator {
 	};
 
 	HWND window_handle_;
+	cv::Mat image_;
 
 	template<typename T>
 	constexpr size_t get_elem_size();
 
 public:
-	cv::Mat image_;
 	
 	ImageOperator();
 	explicit ImageOperator(const std::filesystem::path& path);
@@ -32,6 +32,7 @@ public:
 	template<typename T>
 	nl::MultArray<T> get_image_data();
 
+	HWND get_show_window();
 
 	void open(const std::filesystem::path& path);
 	void save();
@@ -42,12 +43,10 @@ public:
 	ImageOperator& rotation(int angle, int x, int y);
 	ImageOperator& reverse_horizontally();
 	ImageOperator& reverse_vertically();
-	ImageOperator& reverse_vertically_new();
 	ImageOperator& to_grayscale();
 	ImageOperator& to_binary(int = 100);
 	ImageOperator& to_pseudo_color();
 	std::array<size_t, 256> get_histogram_data();
-	HWND get_show_window();
 	void show_image();
 
 
