@@ -31,8 +31,9 @@ nl::ImageOperator::~ImageOperator() {
 }
 
 template<typename T>
-nl::MultArray<T> nl::ImageOperator::get_image_data() {
-    nl::MultArray<RGBPixel> data(reinterpret_cast<RGBPixel*>(image_.data), { image_.rows, image_.cols });
+std::tuple<nl::MultArray<T>,int,int> nl::ImageOperator::get_image_data() {
+    nl::MultArray<RGBPixel> data(reinterpret_cast<T>(image_.data), { image_.rows, image_.cols });
+    return { data,image_.rows,image_.cols };
 }
 
 void nl::ImageOperator::open(const std::filesystem::path& path) {
@@ -72,8 +73,7 @@ nl::ImageOperator& nl::ImageOperator::rotation(int angle,int x,int y) {
 nl::ImageOperator& nl::ImageOperator::reverse_horizontally() {
     int row = image_.rows;
     int col = image_.cols;
-
-    nl::MultArray<RGBPixel> data(reinterpret_cast<RGBPixel*>(image_.data), { row, col });
+    auto [data, row, col] = get_image_data<BGRPixel>();
 
     for (int i = 0; i < row; ++i)
         for (int j = 0; j < col / 2; ++j)
@@ -100,15 +100,14 @@ nl::ImageOperator& nl::ImageOperator::reverse_vertically() {
     }
 
 #undef LINE
-    delete[]buf;
+    delete[] buf;
 
     return *this;
 }
 
 nl::ImageOperator& nl::ImageOperator::to_grayscale() {
 
-    int row = image_.rows, col = image_.cols;
-    nl::MultArray<RGBPixel> data(reinterpret_cast<RGBPixel*>(image_.data), { row, col });
+    auto [data, row, col] = get_image_data<BGRPixel>();
 
     auto image = cv::Mat(row, col, CV_8UC1);
     nl::MultArray<uchar> image_data(image.data, { row,col });
@@ -153,22 +152,37 @@ nl::ImageOperator& nl::ImageOperator::to_pseudo_color() {
     return *this;
 }
 
-std::array<size_t, 256> nl::ImageOperator::get_histogram_data() {
+std::vector<std::array<size_t, 256>> nl::ImageOperator::get_histogram_data() {
+    size_t pixel_size = image_.elemSize();
 
-    // @TODO 暂时仅实现灰度图的直方图
-    if (image_.elemSize() != 1)
-        return {};
-    std::array<size_t, 256> count = { 0 };
-    int row = image_.rows, col = image_.cols;
-    nl::MultArray<uchar> data(image_.data, { row, col });
-
-    for (int i = 0; i < row; ++i) {
-        for (int j = 0; j < col; ++j) {
-            count[data({ i, j })]++;
+    // 灰度图
+    if (pixel_size == 1) {
+        std::array<size_t, 256> count = { 0 };
+        auto [data, row, col] = get_image_data<uchar>();
+        for (int i = 0; i < row; ++i) {
+            for (int j = 0; j < col; ++j) {
+                count[data({ i, j })]++;
+            }
         }
+        return { count };
     }
+    // 彩色图 imread 读取类型为 BGR
+    else if (pixel_size == 3) {
+        std::vector<std::array<size_t, 256>> count(3);
+        auto [data, row, col] = get_image_data<BGRPixel>();
+        for (int i = 0; i < row; ++i) {
+            for (int j = 0; j < col; ++j) {
+                (count[B])[data({ i,j }).B]++;
+                (count[G])[data({ i,j }).G]++;
+                (count[R])[data({ i,j }).R]++;
+            }
+        }
+        return count;
+    }
+	else {
+        throw std::exception("no support image type");
+	}
 
-    return count;
 }
 
 HWND nl::ImageOperator::get_show_window() {

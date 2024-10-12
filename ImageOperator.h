@@ -9,8 +9,11 @@
 namespace nl {
 
 class ImageOperator {
-	struct RGBPixel {
-		uchar R, G, B;
+	struct BGRPixel {
+		uchar B, G, R;
+	};
+	enum {
+		B, G, R
 	};
 
 	HWND window_handle_;
@@ -30,7 +33,7 @@ public:
 	ImageOperator operator = (const ImageOperator&) = delete;
 
 	template<typename T>
-	nl::MultArray<T> get_image_data();
+	std::tuple<nl::MultArray<T>, int, int> get_image_data();
 
 	HWND get_show_window();
 
@@ -46,7 +49,7 @@ public:
 	ImageOperator& to_grayscale();
 	ImageOperator& to_binary(int = 100);
 	ImageOperator& to_pseudo_color();
-	std::array<size_t, 256> get_histogram_data();
+	std::vector<std::array<size_t, 256>> get_histogram_data();
 	void show_image();
 
 
