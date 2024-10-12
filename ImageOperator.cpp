@@ -9,7 +9,7 @@
 
 template<typename T>
 constexpr size_t nl::ImageOperator::get_elem_size() {
-    if constexpr (std::is_same_v<T,RGBPixel>) 
+    if constexpr (std::is_same_v<T,BGRPixel>) 
         return 3;
     else if (std::is_same_v<T,uchar>)
         return 1;
@@ -32,8 +32,8 @@ nl::ImageOperator::~ImageOperator() {
 
 template<typename T>
 std::tuple<nl::MultArray<T>,int,int> nl::ImageOperator::get_image_data() {
-    nl::MultArray<RGBPixel> data(reinterpret_cast<T>(image_.data), { image_.rows, image_.cols });
-    return { data,image_.rows,image_.cols };
+    nl::MultArray<T> data(reinterpret_cast<T *>(image_.data), { image_.rows, image_.cols });
+    return { data, image_.rows, image_.cols };
 }
 
 void nl::ImageOperator::open(const std::filesystem::path& path) {
@@ -71,8 +71,6 @@ nl::ImageOperator& nl::ImageOperator::rotation(int angle,int x,int y) {
  * @brief : 水平翻转
 */
 nl::ImageOperator& nl::ImageOperator::reverse_horizontally() {
-    int row = image_.rows;
-    int col = image_.cols;
     auto [data, row, col] = get_image_data<BGRPixel>();
 
     for (int i = 0; i < row; ++i)
