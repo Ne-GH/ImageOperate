@@ -56,6 +56,8 @@ nl::ImageOperator& nl::ImageOperator::zoom(double multiple) {
     if (image_.empty() || multiple == 1)
         return *this;
 
+	int new_width = image_.cols * multiple, new_height = image_.rows * multiple;
+	auto new_image = cv::Mat(new_width, new_height, image_.type());
     // @TODO 二者操作都应该在image_back_ 原图像上完成
     // 填充像素
     if (multiple > 1) {
@@ -65,12 +67,15 @@ nl::ImageOperator& nl::ImageOperator::zoom(double multiple) {
     // x' = x * scale   ==>     x = x'/scale
     else {
         if (image_.elemSize() == 1) {
+			auto [src_data, src_row, src_col] = get_image_data<uchar>();
+			auto [new_data, ignore1, ignore2] = get_image_data<uchar>();
+
+			for (int i = 0; i < new_height; ++i)
+				for (int j = 0; j < new_width; ++j)
+					new_data({ i,j }) = src_data({ static_cast<int>(i / multiple),static_cast<int>(j / multiple)});
 
         }
         else if (image_.elemSize() == 3) {
-			int new_width = image_.cols * multiple, new_height = image_.rows * multiple;
-			auto new_image = cv::Mat(new_width, new_height, image_.type());
-
 			auto [src_data, src_row, src_col] = get_image_data<BGRPixel>();
 			auto [new_data, ignore1, ignore2] = get_image_data<BGRPixel>();
 
