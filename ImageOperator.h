@@ -18,6 +18,7 @@ class ImageOperator {
 
 	HWND window_handle_;
 	cv::Mat image_;
+	cv::Mat image_back_;
 
 	template<typename T>
 	constexpr size_t get_elem_size();
@@ -40,7 +41,7 @@ public:
 	void open(const std::filesystem::path& path);
 	void save();
 
-	ImageOperator& zoom(int multiple);
+	ImageOperator& zoom(double multiple);
 	ImageOperator& resize(int width, int height);
 	ImageOperator& rotation(int angle);
 	ImageOperator& rotation(int angle, int x, int y);
