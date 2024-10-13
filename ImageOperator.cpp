@@ -31,10 +31,11 @@ nl::ImageOperator::~ImageOperator() {
     cv::destroyWindow("ImageShowWindow");
 }
 
+
 template<typename T>
-std::tuple<nl::MultArray<T>,int,int> nl::ImageOperator::get_image_data() {
-    nl::MultArray<T> data(reinterpret_cast<T *>(image_.data), { image_.rows, image_.cols });
-    return { data, image_.rows, image_.cols };
+std::tuple<nl::MultArray<T>,int,int> GetImageData(const cv::Mat &image) {
+    nl::MultArray<T> data(reinterpret_cast<T *>(image.data), { image.rows, image.cols });
+    return { data, image.rows, image.cols };
 }
 
 void nl::ImageOperator::open(const std::filesystem::path& path) {
@@ -56,39 +57,25 @@ nl::ImageOperator& nl::ImageOperator::zoom(double multiple) {
     if (image_.empty() || multiple == 1)
         return *this;
 
-	int new_width = image_.cols * multiple, new_height = image_.rows * multiple;
-	auto new_image = cv::Mat(new_width, new_height, image_.type());
+    auto func = [&]<typename T>() {
+		int new_width = image_.cols * multiple, new_height = image_.rows * multiple;
+		auto new_image = cv::Mat(new_height, new_width, image_.type());
+        auto [src_data, src_row, src_col] = GetImageData<T>(image_);
+        auto [new_data, ignore1, ignore2] = GetImageData<T>(new_image);
+
+        for (int i = 0; i < new_height; ++i)
+            for (int j = 0; j < new_width; ++j)
+                new_data({ i,j }) = src_data({ static_cast<int>(i / multiple),static_cast<int>(j / multiple) });
+
+        image_ = new_image;
+    };
+
     // @TODO 二者操作都应该在image_back_ 原图像上完成
     // 填充像素
-    if (multiple > 1) {
-
-    }
-    // 抽取像素
-    // x' = x * scale   ==>     x = x'/scale
-    else {
-        if (image_.elemSize() == 1) {
-			auto [src_data, src_row, src_col] = get_image_data<uchar>();
-			auto [new_data, ignore1, ignore2] = get_image_data<uchar>();
-
-			for (int i = 0; i < new_height; ++i)
-				for (int j = 0; j < new_width; ++j)
-					new_data({ i,j }) = src_data({ static_cast<int>(i / multiple),static_cast<int>(j / multiple)});
-
-        }
-        else if (image_.elemSize() == 3) {
-			auto [src_data, src_row, src_col] = get_image_data<BGRPixel>();
-			auto [new_data, ignore1, ignore2] = get_image_data<BGRPixel>();
-
-			for (int i = 0; i < new_height; ++i)
-				for (int j = 0; j < new_width; ++j)
-					new_data({ i,j }) = src_data({ static_cast<int>(i / multiple),static_cast<int>(j / multiple)});
-
-        }
-
-    }
-
-
-
+    if (image_.elemSize() == 1) 
+        func.operator()<uchar>();
+    else if (image_.elemSize() == 3) 
+        func.operator()<BGRPixel>();
 
     return *this;
 }
@@ -112,7 +99,7 @@ nl::ImageOperator& nl::ImageOperator::rotation(int angle,int x,int y) {
  * @brief : 水平翻转
 */
 nl::ImageOperator& nl::ImageOperator::reverse_horizontally() {
-    auto [data, row, col] = get_image_data<BGRPixel>();
+    auto [data, row, col] = GetImageData<BGRPixel>(image_);
 
     for (int i = 0; i < row; ++i)
         for (int j = 0; j < col / 2; ++j)
@@ -146,7 +133,7 @@ nl::ImageOperator& nl::ImageOperator::reverse_vertically() {
 
 nl::ImageOperator& nl::ImageOperator::to_grayscale() {
 
-    auto [data, row, col] = get_image_data<BGRPixel>();
+    auto [data, row, col] = GetImageData<BGRPixel>(image_); 
 
     auto image = cv::Mat(row, col, CV_8UC1);
     nl::MultArray<uchar> image_data(image.data, { row,col });
@@ -197,7 +184,7 @@ std::vector<std::array<size_t, 256>> nl::ImageOperator::get_histogram_data() {
     // 灰度图
     if (pixel_size == 1) {
         std::array<size_t, 256> count = { 0 };
-        auto [data, row, col] = get_image_data<uchar>();
+        auto [data, row, col] = GetImageData<uchar>(image_); 
         for (int i = 0; i < row; ++i) {
             for (int j = 0; j < col; ++j) {
                 count[data({ i, j })]++;
@@ -208,7 +195,7 @@ std::vector<std::array<size_t, 256>> nl::ImageOperator::get_histogram_data() {
     // 彩色图 imread 读取类型为 BGR
     else if (pixel_size == 3) {
         std::vector<std::array<size_t, 256>> count(3);
-        auto [data, row, col] = get_image_data<BGRPixel>();
+        auto [data, row, col] = GetImageData<BGRPixel>(image_);
         for (int i = 0; i < row; ++i) {
             for (int j = 0; j < col; ++j) {
                 (count[B])[data({ i,j }).B]++;

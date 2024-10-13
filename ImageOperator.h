@@ -33,9 +33,6 @@ public:
 	ImageOperator(const ImageOperator&) = delete;
 	ImageOperator operator = (const ImageOperator&) = delete;
 
-	template<typename T>
-	std::tuple<nl::MultArray<T>, int, int> get_image_data();
-
 	HWND get_show_window();
 
 	void open(const std::filesystem::path& path);

@@ -111,7 +111,7 @@ void MainWindow::open_image() {
 		return;
 
 	image_operator_.open(file_dialog.GetPathName().GetBuffer());
-	image_operator_.zoom(0.3);
+	image_operator_.zoom(1.5);
 	image_operator_.show_image();
 
 
