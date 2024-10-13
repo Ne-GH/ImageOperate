@@ -35,6 +35,11 @@ BEGIN_MESSAGE_MAP(MainWindow, CDialogEx)
 	ON_WM_QUERYDRAGICON()
     ON_COMMAND(ID_OPEN_IMAGE, &MainWindow::open_image)
 	ON_WM_GETMINMAXINFO()
+	ON_WM_SIZE()
+	ON_BN_CLICKED(IDC_ZOOM_UP, &MainWindow::OnBnClickedZoomUp)
+	ON_BN_CLICKED(IDC_ZOOM_IN, &MainWindow::OnBnClickedZoomIn)
+	ON_BN_CLICKED(IDC_TO_GRAYSCALE, &MainWindow::OnBnClickedToGrayscale)
+	ON_BN_CLICKED(IDC_TO_BINARY, &MainWindow::OnBnClickedToBinary)
 END_MESSAGE_MAP()
 
 
@@ -82,6 +87,7 @@ void MainWindow::OnPaint() {
 	{
 		CDialogEx::OnPaint();
 	}
+
 }
 
 HCURSOR MainWindow::OnQueryDragIcon() {
@@ -111,7 +117,6 @@ void MainWindow::open_image() {
 		return;
 
 	image_operator_.open(file_dialog.GetPathName().GetBuffer());
-	image_operator_.zoom(1.5);
 	image_operator_.show_image();
 
 
@@ -119,6 +124,9 @@ void MainWindow::open_image() {
 
 
 void MainWindow::OnGetMinMaxInfo(MINMAXINFO* lpMMI) {
+
+
+
 	static int min_width = 580, min_height = 410;
 
 	if (lpMMI->ptMinTrackSize.x < min_width)
@@ -129,4 +137,32 @@ void MainWindow::OnGetMinMaxInfo(MINMAXINFO* lpMMI) {
 
 
 	CDialogEx::OnGetMinMaxInfo(lpMMI);
+
+}
+
+
+
+void MainWindow::OnBnClickedZoomUp() {
+	zoom_ += 0.1;
+	image_operator_.zoom(zoom_);
+	image_operator_.show_image();
+}
+
+
+void MainWindow::OnBnClickedZoomIn() {
+	zoom_ -= 0.1;
+	image_operator_.zoom(zoom_);
+	image_operator_.show_image();
+}
+
+
+void MainWindow::OnBnClickedToGrayscale() {
+	image_operator_.to_grayscale();
+	image_operator_.show_image();
+}
+
+
+void MainWindow::OnBnClickedToBinary() {
+	image_operator_.to_binary();
+	image_operator_.show_image();
 }

@@ -6,11 +6,10 @@
 #define IDR_MAINFRAME                   128
 #define MAIN_MENU                       131
 #define IDC_MAIN_PIC                    1000
-#define IDC_BUTTON1                     1001
-#define IDC_BUTTON2                     1002
-#define IDC_BUTTON3                     1003
-#define IDC_BUTTON4                     1004
-#define IDC_SLIDER1                     1005
+#define IDC_ZOOM_UP                     1001
+#define IDC_ZOOM_IN                     1002
+#define IDC_TO_GRAYSCALE                1003
+#define IDC_TO_BINARY                   1004
 #define IDC_ZOOM_SLIDER                 1005
 #define ID_32773                        32773
 #define ID_OPEN_IMAGE                   32774

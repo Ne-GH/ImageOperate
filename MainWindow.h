@@ -10,6 +10,7 @@ class MainWindow : public CDialogEx
 {
 	CMenu menu_;
 	nl::ImageOperator image_operator_;
+	double zoom_ = 1.0;
 public:
 	MainWindow(CWnd* pParent = nullptr);	// 标准构造函数
 	void bind(HWND);
@@ -37,4 +38,8 @@ protected:
 public:
 	afx_msg void open_image();
 	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
+	afx_msg void OnBnClickedZoomUp();
+	afx_msg void OnBnClickedZoomIn();
+	afx_msg void OnBnClickedToGrayscale();
+	afx_msg void OnBnClickedToBinary();
 };

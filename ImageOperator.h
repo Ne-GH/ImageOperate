@@ -33,12 +33,16 @@ public:
 	ImageOperator(const ImageOperator&) = delete;
 	ImageOperator operator = (const ImageOperator&) = delete;
 
+	operator bool() const ;
+
 	HWND get_show_window();
 
 	void open(const std::filesystem::path& path);
 	void save();
 
 	ImageOperator& zoom(double multiple);
+	ImageOperator& set_image_width(int width);
+	ImageOperator& set_image_height(int height);
 	ImageOperator& resize(int width, int height);
 	ImageOperator& rotation(int angle);
 	ImageOperator& rotation(int angle, int x, int y);
@@ -48,6 +52,7 @@ public:
 	ImageOperator& to_binary(int = 100);
 	ImageOperator& to_pseudo_color();
 	std::vector<std::array<size_t, 256>> get_histogram_data();
+
 	void show_image();
 
 
