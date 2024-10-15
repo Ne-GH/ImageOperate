@@ -9,51 +9,51 @@
 namespace nl {
 
 class ImageOperator {
-	struct BGRPixel {
-		uchar B, G, R;
-	};
-	enum {
-		B, G, R
-	};
+    struct BGRPixel {
+        uchar B, G, R;
+    };
+    enum {
+        B, G, R
+    };
 
-	HWND window_handle_;
-	cv::Mat image_;
-	cv::Mat image_back_;
+    HWND window_handle_;
+    cv::Mat image_;
+    cv::Mat image_back_;
 
-	template<typename T>
-	constexpr size_t get_elem_size();
+    template<typename T>
+    constexpr size_t get_elem_size();
 
 public:
-	
-	ImageOperator();
-	explicit ImageOperator(const std::filesystem::path& path);
-	~ImageOperator();
+    
+    ImageOperator();
+    explicit ImageOperator(const std::filesystem::path& path);
+    ~ImageOperator();
 
-	// @TODO 拷贝动作待处理
-	ImageOperator(const ImageOperator&) = delete;
-	ImageOperator operator = (const ImageOperator&) = delete;
+    // @TODO 拷贝动作待处理
+    ImageOperator(const ImageOperator&) = delete;
+    ImageOperator operator = (const ImageOperator&) = delete;
 
-	operator bool() const ;
+    operator bool() const ;
 
-	HWND get_show_window();
+    HWND get_show_window();
 
-	void open(const std::filesystem::path& path);
-	void save();
+    void open(const std::filesystem::path& path);
+    void save();
 
-	ImageOperator& zoom(double multiple);
-	ImageOperator& set_image_width(int width);
-	ImageOperator& set_image_height(int height);
-	ImageOperator& resize(int width, int height);
-	ImageOperator& rotation(int angle);
-	ImageOperator& rotation(int x, int y,int angle);
-	ImageOperator& reverse_horizontally();
-	ImageOperator& reverse_vertically();
-	ImageOperator& to_grayscale();
-	ImageOperator& to_binary(int = 100);
-	ImageOperator& to_pseudo_color();
-	std::vector<std::array<size_t, 256>> get_histogram_data();
+    ImageOperator& zoom(double multiple);
+    ImageOperator& set_image_width(int width);
+    ImageOperator& set_image_height(int height);
+    ImageOperator& resize(int width, int height);
+    ImageOperator& rotation(int angle);
+    ImageOperator& rotation(int x, int y,int angle);
+    ImageOperator& reverse_horizontally();
+    ImageOperator& reverse_vertically();
+    ImageOperator& to_grayscale();
+    ImageOperator& to_binary(int = 100);
+    ImageOperator& to_pseudo_color();
+    std::vector<std::array<size_t, 256>> get_histogram_data();
 
-	void show_image();
+    void show_image();
 
 
 };

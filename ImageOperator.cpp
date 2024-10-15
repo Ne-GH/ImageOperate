@@ -139,14 +139,11 @@ nl::ImageOperator& nl::ImageOperator::rotation(int angle) {
 #if false
     rotation(image_.rows / 2, image_.cols / 2, angle);
 #else
-    // 获取图像中心点坐标
     cv::Point2f center(image_.cols / 2.0, image_.rows / 2.0);
-    // 获取旋转矩阵
-    cv::Mat rotationMatrix = cv::getRotationMatrix2D(center, angle, 1.0);
-    // 执行旋转操作
-    cv::Mat rotatedImage;
-    cv::warpAffine(image_, rotatedImage, rotationMatrix, image_.size());
-    image_ = rotatedImage;
+    cv::Mat matrix = cv::getRotationMatrix2D(center, angle, 1.0);
+    cv::Mat image;
+    cv::warpAffine(image_, image, matrix, image_.size());
+    image_ = image;
 #endif
     return *this;
 }
