@@ -45,7 +45,7 @@ public:
 	ImageOperator& set_image_height(int height);
 	ImageOperator& resize(int width, int height);
 	ImageOperator& rotation(int angle);
-	ImageOperator& rotation(int angle, int x, int y);
+	ImageOperator& rotation(int x, int y,int angle);
 	ImageOperator& reverse_horizontally();
 	ImageOperator& reverse_vertically();
 	ImageOperator& to_grayscale();

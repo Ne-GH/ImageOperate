@@ -11,7 +11,6 @@
 #define IDC_TO_GRAYSCALE                1003
 #define IDC_TO_BINARY                   1004
 #define IDC_ZOOM_SLIDER                 1005
-#define ID_32773                        32773
 #define ID_OPEN_IMAGE                   32774
 
 // Next default values for new objects

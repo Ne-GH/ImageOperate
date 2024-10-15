@@ -117,8 +117,14 @@ void MainWindow::open_image() {
 		return;
 
 	image_operator_.open(file_dialog.GetPathName().GetBuffer());
-	image_operator_.show_image();
 
+	CRect rect;
+	GetDlgItem(IDC_MAIN_PIC)->GetWindowRect(rect);
+
+	image_operator_.resize(rect.Width(), rect.Height());
+	image_operator_.rotation(5);
+
+	image_operator_.show_image();
 
 }
 
@@ -143,15 +149,15 @@ void MainWindow::OnGetMinMaxInfo(MINMAXINFO* lpMMI) {
 
 
 void MainWindow::OnBnClickedZoomUp() {
-	zoom_ += 0.1;
-	image_operator_.zoom(zoom_);
+	// zoom_ += 0.1;
+	image_operator_.zoom(1.1);
 	image_operator_.show_image();
 }
 
 
 void MainWindow::OnBnClickedZoomIn() {
-	zoom_ -= 0.1;
-	image_operator_.zoom(zoom_);
+	// zoom_ -= 0.1;
+	image_operator_.zoom(0.9);
 	image_operator_.show_image();
 }
 

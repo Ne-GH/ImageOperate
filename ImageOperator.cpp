@@ -58,8 +58,8 @@ nl::ImageOperator& nl::ImageOperator::zoom(double multiple) {
         return *this;
 
     auto func = [&]<typename T>() {
-		int new_width = image_.cols * multiple, new_height = image_.rows * multiple;
-		auto new_image = cv::Mat(new_height, new_width, image_.type());
+        int new_width = image_.cols * multiple, new_height = image_.rows * multiple;
+        auto new_image = cv::Mat(new_height, new_width, image_.type());
         auto [src_data, src_row, src_col] = GetImageData<T>(image_);
         auto [new_data, ignore1, ignore2] = GetImageData<T>(new_image);
 
@@ -136,11 +136,38 @@ nl::ImageOperator& nl::ImageOperator::resize(int width, int height) {
 }
 
 nl::ImageOperator& nl::ImageOperator::rotation(int angle) {
-
+    rotation(image_.rows / 2, image_.cols / 2, angle);
     return *this;
 }
 
-nl::ImageOperator& nl::ImageOperator::rotation(int angle,int x,int y) {
+nl::ImageOperator& nl::ImageOperator::rotation(int x, int y, int angle) {
+    angle = -angle;
+    if (image_.elemSize() == 1) {
+
+    }
+    else if (image_.elemSize() == 3) {
+        auto [src_data, row, col] = GetImageData<BGRPixel>(image_);
+        double angle_rad = angle * CV_PI / 180;
+        cv::Mat image(row, col, image_.type());
+        auto [dest_data, _1, _2] = GetImageData<BGRPixel>(image);
+        /*
+			dest.x = (src.x - x) * cos(angle) - (src.y - y) * sin(angle) + x
+            dest.y = (src.x - x) * sin(angle) + (src.y - y) * cos(angle) + y
+        */
+        for (int i = 0; i < row; ++i) {
+            for (int j = 0; j < col; ++j) {
+                int dx = i - x;
+                int dy = j - y;
+                int dest_x = static_cast<int>(dx * cos(angle_rad) - dy * sin(angle_rad) + x);
+                int dest_y = static_cast<int>(dx * sin(angle_rad) + dy * cos(angle_rad) + y);
+                if (dest_x >= 0 && dest_x < row && dest_y >= 0 && dest_y < col) {
+                    dest_data({ dest_x, dest_y }) = src_data({ i, j });
+                }
+            }
+
+        }
+        image_ = image;
+    }
 
     return *this;
 }
@@ -255,9 +282,9 @@ std::vector<std::array<size_t, 256>> nl::ImageOperator::get_histogram_data() {
         }
         return count;
     }
-	else {
+    else {
         throw std::exception("no support image type");
-	}
+    }
 
 }
 
