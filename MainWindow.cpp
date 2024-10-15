@@ -122,7 +122,7 @@ void MainWindow::open_image() {
 	GetDlgItem(IDC_MAIN_PIC)->GetWindowRect(rect);
 
 	image_operator_.resize(rect.Width(), rect.Height());
-	image_operator_.rotation(5);
+	image_operator_.rotation(45);
 
 	image_operator_.show_image();
 

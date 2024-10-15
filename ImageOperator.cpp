@@ -141,33 +141,34 @@ nl::ImageOperator& nl::ImageOperator::rotation(int angle) {
 }
 
 nl::ImageOperator& nl::ImageOperator::rotation(int x, int y, int angle) {
-    angle = -angle;
-    if (image_.elemSize() == 1) {
-
-    }
-    else if (image_.elemSize() == 3) {
-        auto [src_data, row, col] = GetImageData<BGRPixel>(image_);
+    auto rotation = [&] <typename T>{
+        auto [src_data, row, col] = GetImageData<T>(image_);
         double angle_rad = angle * CV_PI / 180;
         cv::Mat image(row, col, image_.type());
-        auto [dest_data, _1, _2] = GetImageData<BGRPixel>(image);
+        auto [dest_data, _1, _2] = GetImageData<T>(image);
         /*
-			dest.x = (src.x - x) * cos(angle) - (src.y - y) * sin(angle) + x
+            dest.x = (src.x - x) * cos(angle) - (src.y - y) * sin(angle) + x
             dest.y = (src.x - x) * sin(angle) + (src.y - y) * cos(angle) + y
+            dest.x - x      =       dx * cos(angle) - dy * sin(angle)
+            dest.y - y      =       dy * sin(angle) + dy * 
         */
-        for (int i = 0; i < row; ++i) {
-            for (int j = 0; j < col; ++j) {
+        for (int i = 0; i < image.rows; ++i) {
+            for (int j = 0; j < image.cols; ++j) {
                 int dx = i - x;
                 int dy = j - y;
                 int dest_x = static_cast<int>(dx * cos(angle_rad) - dy * sin(angle_rad) + x);
                 int dest_y = static_cast<int>(dx * sin(angle_rad) + dy * cos(angle_rad) + y);
                 if (dest_x >= 0 && dest_x < row && dest_y >= 0 && dest_y < col) {
-                    dest_data({ dest_x, dest_y }) = src_data({ i, j });
+                    dest_data({ i, j }) = src_data({ dest_x, dest_y });
                 }
             }
-
         }
         image_ = image;
-    }
+    };
+    if (image_.elemSize() == 1) 
+        rotation.operator() <uchar> ();
+    else if (image_.elemSize() == 3) 
+        rotation.operator() <BGRPixel> ();
 
     return *this;
 }
