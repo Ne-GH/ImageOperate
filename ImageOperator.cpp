@@ -86,13 +86,13 @@ nl::ImageOperator& nl::ImageOperator::set_image_width(int width) {
     double multiple = width * 1.0 / image_.cols;
 
     auto func = [&]<typename T>() {
-        int new_width = image_.cols * multiple, new_height = image_.rows;
-        auto new_image = cv::Mat(image_.rows, new_width, image_.type());
-        auto [src_data, src_row, src_col] = GetImageData<T>(image_);
-        auto [new_data, ignore1, ignore2] = GetImageData<T>(new_image);
+        int row = image_.rows, col = image_.cols * multiple;
+        auto new_image = cv::Mat(row, col, image_.type());
+        auto [src_data, _1, _2] = GetImageData<T>(image_);
+        auto [new_data, _3, _4] = GetImageData<T>(new_image);
 
-        for (int i = 0; i < new_height; ++i)
-            for (int j = 0; j < new_width; ++j)
+        for (int i = 0; i < row; ++i)
+            for (int j = 0; j < col; ++j)
                 new_data({ i,j }) = src_data({ i,static_cast<int>(j / multiple) });
 
         image_ = new_image;
@@ -111,13 +111,13 @@ nl::ImageOperator& nl::ImageOperator::set_image_height(int height) {
     double multiple = height * 1.0 / image_.rows;
 
     auto func = [&]<typename T>() {
-        int new_height = image_.rows * multiple, new_width = image_.cols;
-        auto new_image = cv::Mat(image_.rows, new_width, image_.type());
+        int row = image_.rows * multiple, col = image_.cols;
+        auto new_image = cv::Mat(row, col, image_.type());
         auto [src_data, src_row, src_col] = GetImageData<T>(image_);
         auto [new_data, ignore1, ignore2] = GetImageData<T>(new_image);
 
-        for (int i = 0; i < new_height; ++i)
-            for (int j = 0; j < new_width; ++j)
+        for (int i = 0; i < row; ++i)
+            for (int j = 0; j < col; ++j)
                 new_data({ i,j }) = src_data({ static_cast<int>(i / multiple), j });
 
         image_ = new_image;
