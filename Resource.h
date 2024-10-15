@@ -11,6 +11,7 @@
 #define IDC_TO_GRAYSCALE                1003
 #define IDC_TO_BINARY                   1004
 #define IDC_ZOOM_SLIDER                 1005
+#define IDC_SLIDER2                     1007
 #define ID_OPEN_IMAGE                   32774
 
 // Next default values for new objects
@@ -19,7 +20,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        132
 #define _APS_NEXT_COMMAND_VALUE         32775
-#define _APS_NEXT_CONTROL_VALUE         1006
+#define _APS_NEXT_CONTROL_VALUE         1008
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

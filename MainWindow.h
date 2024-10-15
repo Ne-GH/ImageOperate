@@ -10,7 +10,7 @@ class MainWindow : public CDialogEx
 {
 	CMenu menu_;
 	nl::ImageOperator image_operator_;
-	double zoom_ = 1.0;
+	CSliderCtrl zoom_slider_;
 public:
 	MainWindow(CWnd* pParent = nullptr);	// 标准构造函数
 	void bind(HWND);
@@ -42,4 +42,6 @@ public:
 	afx_msg void OnBnClickedZoomIn();
 	afx_msg void OnBnClickedToGrayscale();
 	afx_msg void OnBnClickedToBinary();
+	// afx_msg void OnNMCustomdrawZoomSlider(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 };
